@@ -81,7 +81,7 @@
   >
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/")}
+        onPress={() => goto("/Value-Eye")}
         width="100%"
         height="100%"
         color="transparent"
@@ -98,7 +98,7 @@
     </Container>
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/history")}
+        onPress={() => goto("/Value-Eye/history")}
         width="100%"
         height="100%"
         color="transparent"
@@ -115,7 +115,7 @@
     </Container>
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/map")}
+        onPress={() => goto("/Value-Eye/map")}
         width="100%"
         height="100%"
         color="transparent"
@@ -132,7 +132,7 @@
     </Container>
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/settings")}
+        onPress={() => goto("/Value-Eye/settings")}
         width="100%"
         height="100%"
         color="transparent"

@@ -11,6 +11,7 @@
   import { ReceiptText, History, Map, Settings } from "lucide-svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
+  import { base } from "$app/paths";
 
   import { appState } from "$lib/stores/app.svelte";
 
@@ -81,7 +82,7 @@
   >
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/Value-Eye")}
+        onPress={() => goto(`${base}/`)}
         width="100%"
         height="100%"
         color="transparent"
@@ -98,7 +99,7 @@
     </Container>
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/Value-Eye/history")}
+        onPress={() => goto(`${base}/history`)}
         width="100%"
         height="100%"
         color="transparent"
@@ -115,7 +116,7 @@
     </Container>
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/Value-Eye/map")}
+        onPress={() => goto(`${base}/map`)}
         width="100%"
         height="100%"
         color="transparent"
@@ -132,7 +133,7 @@
     </Container>
     <Container width="25%" height="100%" alignment="center">
       <Button
-        onPress={() => goto("/Value-Eye/settings")}
+        onPress={() => goto(`${base}/settings`)}
         width="100%"
         height="100%"
         color="transparent"

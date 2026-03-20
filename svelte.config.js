@@ -7,7 +7,10 @@ const config = {
 			// GitHub Pages serves from the repo root or a /docs folder.
 			// The default output dir 'build' works fine with gh-pages branch deployment.
 			fallback: '404.html'
-		})
+		}),
+		paths: {
+			base: '/Value-Eye'
+		}
 	}
 };
 

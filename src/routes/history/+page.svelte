@@ -8,13 +8,14 @@
   import { theme } from "$lib/styles/theme";
   import { appState } from "$lib/stores/app.svelte";
   import { goto } from "$app/navigation";
+  import { base } from "$app/paths";
 
   function restore(history: any) {
     if (
       confirm("現在の入力内容は上書きされます。履歴を復元して比較しますか？")
     ) {
       appState.loadHistory(history);
-      goto("/");
+      goto(`${base}/`);
     }
   }
 </script>

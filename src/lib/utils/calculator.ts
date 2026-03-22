@@ -1,28 +1,44 @@
 import { UNITS } from "$lib/constants/units";
 import type { Item } from "$lib/types/Item";
 
-export function analyzeItems(items: Item[]) {
+export function analyzeItems(items: Item[], mode: 'capacity' | 'point' = 'capacity') {
   const validItems = items
     .filter((i) => {
       const p = parseFloat(i.price);
-      const a = parseFloat(i.amount);
-      return !isNaN(p) && !isNaN(a) && p > 0 && a > 0;
+      if (isNaN(p) || p <= 0) return false;
+      if (mode === 'capacity') {
+        const a = parseFloat(i.amount);
+        return !isNaN(a) && a > 0;
+      } else {
+        const c = parseFloat(i.itemCount || "1");
+        return !isNaN(c) && c > 0;
+      }
     })
     .map((item) => {
       const price = parseFloat(item.price);
-      const amount = parseFloat(item.amount);
+      let unitPrice: number;
+      let normalizedAmount: number;
+      let baseUnit: string;
 
-      const unitDef = UNITS.find((u) => u.value === item.unit);
-      const multiplier = unitDef ? unitDef.multiplier : 1;
-      const normalizedAmount = amount * multiplier;
-      const baseUnit = unitDef ? unitDef.base : item.unit;
-
-      const unitPrice = price / normalizedAmount;
+      if (mode === 'capacity') {
+        const amount = parseFloat(item.amount);
+        const unitDef = UNITS.find((u) => u.value === item.unit);
+        const multiplier = unitDef ? unitDef.multiplier : 1;
+        normalizedAmount = amount * multiplier;
+        baseUnit = unitDef ? unitDef.base : item.unit;
+        unitPrice = price / normalizedAmount;
+      } else {
+        const pointRate = parseFloat(item.pointRate || "0");
+        const itemCount = parseFloat(item.itemCount || "1");
+        normalizedAmount = itemCount;
+        baseUnit = "個";
+        const actualCost = price * (1 - pointRate / 100);
+        unitPrice = actualCost / itemCount;
+      }
 
       return {
         ...item,
         price,
-        amount,
         unitPrice,
         normalizedAmount,
         baseUnit,

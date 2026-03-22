@@ -10,10 +10,12 @@ export function generateId() {
 
 class AppState {
   items = $state<Item[]>([
-    { id: generateId(), name: "", price: "", amount: "", unit: "g" },
+    { id: generateId(), name: "", price: "", amount: "", unit: "g", pointRate: "", itemCount: "1" },
   ]);
   histories = $state<HistoryEntry[]>([]);
   isLoaded = $state(false);
+  mode = $state<'capacity' | 'point'>('capacity');
+  themePreference = $state<'system' | 'light' | 'dark'>('system');
 
   constructor() {
     if (browser) {
@@ -34,10 +36,33 @@ class AppState {
       if (savedHistories && Array.isArray(savedHistories)) {
         this.histories = savedHistories;
       }
+
+      const savedTheme = localStorage.getItem("value-eye-theme") as 'system' | 'light' | 'dark' | null;
+      if (savedTheme) {
+        this.themePreference = savedTheme;
+      }
     } catch (e) {
-      console.error("Failed to load state from IndexedDB", e);
+      console.error("Failed to load state", e);
     }
     this.isLoaded = true;
+    this.applyTheme();
+  }
+
+  applyTheme() {
+    if (!browser) return;
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    if (this.themePreference !== 'system') {
+      root.classList.add(this.themePreference);
+    }
+  }
+
+  setThemePreference(theme: 'system' | 'light' | 'dark') {
+    this.themePreference = theme;
+    if (browser) {
+      localStorage.setItem("value-eye-theme", theme);
+      this.applyTheme();
+    }
   }
 
   async save() {
@@ -54,7 +79,7 @@ class AppState {
   addItem() {
     const lastUnit = this.items[this.items.length - 1]?.unit ?? "g";
     this.items = [
-      { id: generateId(), name: "", price: "", amount: "", unit: lastUnit },
+      { id: generateId(), name: "", price: "", amount: "", unit: lastUnit, pointRate: "", itemCount: "1" },
       ...this.items,
     ];
     this.save();
@@ -67,7 +92,7 @@ class AppState {
 
   resetComparison() {
     this.items = [
-      { id: generateId(), name: "", price: "", amount: "", unit: "g" },
+      { id: generateId(), name: "", price: "", amount: "", unit: "g", pointRate: "", itemCount: "1" },
     ];
     this.save();
   }
@@ -122,7 +147,7 @@ class AppState {
     let total = 0;
     for (const h of this.histories) {
       if (!h.items || h.items.length < 2) continue;
-      const analysis = analyzeItems(h.items);
+      const analysis = analyzeItems(h.items, this.mode);
       if (analysis && analysis.savedAmount) {
         total += analysis.savedAmount;
       }

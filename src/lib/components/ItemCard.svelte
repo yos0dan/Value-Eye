@@ -10,6 +10,9 @@
   import { theme } from "$lib/styles/theme";
   import type { Item } from "$lib/types/Item";
   import { UNITS } from "$lib/constants/units";
+  import { appState } from "$lib/stores/app.svelte";
+
+  let mode = $derived(appState.mode);
 
   let {
     item = $bindable(),
@@ -48,23 +51,43 @@
   );
 
   let unitMultiplier = $derived(
-    UNITS.find((u) => u.value === item.unit)?.multiplier || 1,
+    mode === "capacity"
+      ? UNITS.find((u) => u.value === item.unit)?.multiplier || 1
+      : 1,
   );
   let baseUnit = $derived(
-    UNITS.find((u) => u.value === item.unit)?.base || item.unit,
+    mode === "capacity"
+      ? UNITS.find((u) => u.value === item.unit)?.base || item.unit
+      : "個",
   );
   let isValid = $derived(
-    parseFloat(item.price) > 0 && parseFloat(item.amount) > 0,
+    mode === "capacity"
+      ? parseFloat(item.price) > 0 && parseFloat(item.amount) > 0
+      : parseFloat(item.price) > 0 && parseFloat(item.itemCount || "0") > 0,
   );
   let unitPrice = $derived(
     isValid
-      ? parseFloat(item.price) / (parseFloat(item.amount) * unitMultiplier)
+      ? mode === "capacity"
+        ? parseFloat(item.price) / (parseFloat(item.amount) * unitMultiplier)
+        : (parseFloat(item.price) *
+            (1 - parseFloat(item.pointRate || "0") / 100)) /
+          parseFloat(item.itemCount || "1")
       : 0,
   );
 
-  let isEditing = $state(
-    !item.price || !item.amount || parseFloat(item.price) <= 0 || parseFloat(item.amount) <= 0
-  );
+  import { untrack } from "svelte";
+
+  let isEditing = $state(untrack(() => !isValid));
+  let prevMode = $state(untrack(() => mode));
+
+  $effect(() => {
+    if (!isValid) {
+      isEditing = true;
+    } else if (mode !== prevMode) {
+      isEditing = false;
+    }
+    prevMode = mode;
+  });
 
   let wrapperRef: HTMLDivElement | null = $state(null);
 
@@ -158,27 +181,48 @@
           mainAxisAlignment="spaceBetween"
           crossAxisAlignment="end"
         >
-          <Container width="40%">
-            <TextField
-              bind:value={item.amount}
-              label="容量"
-              placeholder="500"
-              type="number"
-            />
-          </Container>
-          <Container width="40%">
-            <Select bind:value={item.unit} label="単位" options={UNITS} />
-          </Container>
-          <Container width="10%">
-            <Button onPress={onRemove} color="transparent">
-              <Trash size={20} color={theme.colors.textTertiary} />
-            </Button>
-          </Container>
+          {#if mode === "capacity"}
+            <Container width="40%">
+              <TextField
+                bind:value={item.amount}
+                label="容量"
+                placeholder="500"
+                type="number"
+              />
+            </Container>
+            <Container width="40%">
+              <Select bind:value={item.unit} label="単位" options={UNITS} />
+            </Container>
+          {:else}
+            <Container width="40%">
+              <TextField
+                bind:value={item.pointRate}
+                label="付与率(%)"
+                placeholder="0"
+                type="number"
+              />
+            </Container>
+            <Container width="40%">
+              <TextField
+                bind:value={item.itemCount}
+                label="商品数(個)"
+                placeholder="1"
+                type="number"
+              />
+            </Container>
+          {/if}
+          <Button onPress={onRemove} color="transparent">
+            <Trash size={20} color={theme.colors.textTertiary} />
+          </Button>
         </Row>
 
         <!-- Inline Result if valid -->
         {#if isValid}
-          <Row width="100%" mainAxisAlignment="spaceBetween" crossAxisAlignment="center">
+          <Row
+            width="100%"
+            mainAxisAlignment="spaceBetween"
+            crossAxisAlignment="center"
+          >
             <Text
               fontSize={theme.typography.sizes.xs}
               color={theme.colors.textTertiary}
@@ -231,7 +275,15 @@
                 color={theme.colors.textSecondary}
                 fontFamily={theme.typography.fontMono}
               >
-                ¥{formatPrice(parseFloat(item.price))} <span style="color: {theme.colors.textTertiary}">/</span> {item.amount}{item.unit}
+                {#if mode === "capacity"}
+                  ¥{formatPrice(parseFloat(item.price))}
+                  <span style="color: {theme.colors.textTertiary}">/</span>
+                  {item.amount}{item.unit}
+                {:else}
+                  ¥{formatPrice(parseFloat(item.price))}
+                  <span style="color: {theme.colors.textTertiary}">/</span>
+                  {item.pointRate || 0}%還元・{item.itemCount || 1}個
+                {/if}
               </Text>
             </Row>
           </Column>

@@ -10,7 +10,7 @@
   import { appState } from "$lib/stores/app.svelte";
   import { analyzeItems } from "$lib/utils/calculator";
 
-  let analyzedData = $derived(analyzeItems(appState.items));
+  let analyzedData = $derived(analyzeItems(appState.items, appState.mode));
 </script>
 
 <svelte:head>

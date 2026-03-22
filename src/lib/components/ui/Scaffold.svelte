@@ -18,60 +18,107 @@
   } = $props();
 </script>
 
-<Container
-  width="100%"
-  color={backgroundColor}
-  style="min-height: 100vh; position: relative; display: flex; flex-direction: column;"
->
-  {#if appBar}
-    <Container
-      as="header"
-      position="sticky"
-      top={0}
-      zIndex={40}
-      width="100%"
-      color={backgroundColor}
-    >
-      {@render appBar()}
-    </Container>
-  {/if}
-
-  <!-- Body -->
-  <Container as="main" width="100%" style="flex: 1;">
-    {#if children}
-      {@render children()}
+<div class="scaffold-layout" style="background-color: {backgroundColor};">
+  <div class="scaffold-main">
+    {#if appBar}
+      <Container
+        as="header"
+        position="sticky"
+        top={0}
+        zIndex={40}
+        width="100%"
+        color={backgroundColor}
+      >
+        {@render appBar()}
+      </Container>
     {/if}
-  </Container>
 
-  <!-- Floating Action Button -->
-  {#if floatingActionButton}
-    <Container
-      position="fixed"
-      bottom={bottomNavigationBar
-        ? "calc(80px + env(safe-area-inset-bottom))"
-        : "24px"}
-      right="20px"
-      zIndex={45}
-    >
-      {@render floatingActionButton()}
-    </Container>
-  {/if}
+    <!-- Body -->
+    <main class="scaffold-content">
+      {#if children}
+        {@render children()}
+      {/if}
+    </main>
 
-  <!-- Bottom Navigation Bar -->
+    <!-- Floating Action Button -->
+    {#if floatingActionButton}
+      <Container
+        position="fixed"
+        bottom={bottomNavigationBar
+          ? "calc(80px + env(safe-area-inset-bottom))"
+          : "24px"}
+        right="20px"
+        zIndex={45}
+      >
+        {@render floatingActionButton()}
+      </Container>
+    {/if}
+  </div>
+
+  <!-- Navigation Bar -->
   {#if bottomNavigationBar}
-    <Container
-      as="footer"
-      position="fixed"
-      bottom={0}
-      left={0}
-      width="100%"
-      zIndex={50}
-      color={backgroundColor}
-      style="padding-bottom: env(safe-area-inset-bottom);"
-      border={`1px solid transparent`}
-      boxShadow="0 -1px 4px rgba(0, 0, 0, 0.05)"
-    >
+    <nav class="scaffold-nav" style="background-color: {backgroundColor};">
       {@render bottomNavigationBar()}
-    </Container>
+    </nav>
   {/if}
-</Container>
+</div>
+
+<style>
+  .scaffold-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+  }
+
+  .scaffold-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* Add bottom padding equal to mobile nav bar height */
+    padding-bottom: 85px; 
+  }
+
+  .scaffold-content {
+    flex: 1;
+    width: 100%;
+  }
+
+  .scaffold-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Desktop layout override */
+  @media (min-width: 768px) {
+    .scaffold-layout {
+      flex-direction: row;
+    }
+    
+    .scaffold-nav {
+      position: sticky;
+      top: 0;
+      bottom: auto;
+      left: auto;
+      height: 100vh;
+      box-shadow: 1px 0 4px rgba(0, 0, 0, 0.05);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      width: 80px; 
+      flex-shrink: 0;
+      order: -1; /* place it before the main content */
+      padding-bottom: 0;
+    }
+
+    .scaffold-main {
+      padding-bottom: 0px; 
+      width: calc(100% - 80px);
+    }
+  }
+</style>

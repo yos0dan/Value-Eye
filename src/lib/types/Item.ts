@@ -4,4 +4,6 @@ export type Item = {
   price: string;
   amount: string;
   unit: string;
+  pointRate?: string;
+  itemCount?: string;
 };

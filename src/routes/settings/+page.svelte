@@ -72,6 +72,34 @@
     </Container>
   </Column>
 
+  <!-- Theme Setting Section -->
+  <Column gap={theme.spacing.sm} width="100%">
+    <Text
+      fontSize={theme.typography.sizes.lg}
+      fontWeight={theme.typography.weights.bold}
+    >
+      表示テーマ
+    </Text>
+    <Container
+      width="100%"
+      padding={16}
+      borderRadius={theme.borderRadius.md}
+      color={theme.colors.surface}
+      border={`1px solid ${theme.colors.border}`}
+    >
+      <div style="display: flex; background: {theme.colors.bg}; border-radius: {theme.borderRadius.md}px; padding: 4px; border: 1px solid {theme.colors.border};">
+        {#each ['system', 'light', 'dark'] as t}
+          <button
+            onclick={() => appState.setThemePreference(t as 'system'|'light'|'dark')}
+            style="flex: 1; padding: 10px; border-radius: {theme.borderRadius.sm}px; border: none; background: {appState.themePreference === t ? theme.colors.accent : 'transparent'}; color: {appState.themePreference === t ? '#fff' : theme.colors.textSecondary}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
+          >
+            {t === 'system' ? '自動設定 (System)' : t === 'light' ? 'ライト (Light)' : 'ダーク (Dark)'}
+          </button>
+        {/each}
+      </div>
+    </Container>
+  </Column>
+
   <!-- Export Section -->
   <Column gap={theme.spacing.sm} width="100%">
     <Text

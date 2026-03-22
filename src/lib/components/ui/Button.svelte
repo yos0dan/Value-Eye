@@ -11,6 +11,7 @@
     color = theme.colors.surfaceHover,
     textColor = theme.colors.textPrimary,
     padding = { horizontal: theme.spacing.xxl, vertical: 10 },
+    borderRadius = theme.borderRadius.md,
     disabled = false,
     width,
     height,
@@ -21,6 +22,7 @@
     color?: string;
     textColor?: string;
     padding?: any;
+    borderRadius?: number | string;
     disabled?: boolean;
     width?: number | string;
     height?: number | string;
@@ -71,7 +73,7 @@
   >
     <Container
       {color}
-      borderRadius={theme.borderRadius.md}
+      {borderRadius}
       {padding}
       alignment="center"
       width="100%"

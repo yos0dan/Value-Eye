@@ -5,58 +5,104 @@
 }
 
 :root {
-  /* Default: Light Theme */
-  --bg: #f8fafc;
-  --surface: #ffffff;
-  --surface-hover: #f1f5f9;
-  --border: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.1);
-  --danger-border: rgba(239, 68, 68, 0.3);
+  /* Freee Design System Colors - Light */
+  --primary: #2864f0;
+  --primary-active: #285ac8;
+  --primary-disabled: #aac8ff;
+
+  --ink: #323232; /* Text Primary - Headings */
+  --body: #595959; /* Text Body - Default */
+  --muted: #8c8989; /* Text Muted */
+  --muted-soft: #b2afaf;
+
+  --hairline: #e9e7e7; /* Border */
+  --hairline-soft: #f0eded; /* Background Lighter */
+
+  --canvas: #f7f5f5; /* Background Light */
+  --surface-soft: #ffffff;
+  --surface-card: #ffffff;
+  --surface-strong: #f0eded;
+
+  --on-primary: #ffffff;
+  --on-dark: #ffffff;
+
+  /* Semantic Status Colors (Freee-ish) */
+  --brand-pink: #dc1e32; /* Danger / Warning accent */
+  --brand-teal: #00963c; /* Success / Cheapest */
+  --brand-lavender: #1e46aa; /* Heading Blue / Primary Dark */
+  --brand-peach: #ffb91e; /* Warning */
+  --brand-ochre: #fa6414; /* Orange */
+  --brand-mint: #aac8ff;
+  --brand-coral: #dc1e32;
+
+  --success: #00963c;
+  --warning: #ffb91e;
+  --error: #dc1e32;
+
+  --shadow-card: 0 0 1rem rgba(0,0,0,0.1), 0 0.125rem 0.25rem rgba(0,0,0,0.2);
 }
 
+/* Freee-inspired Dark Mode Palette (Adapted) */
 :root.dark {
-  /* Dark Theme Explicit */
-  --bg: #0d0f12;
-  --surface: #1a1e24;
-  --surface-hover: #242931;
-  --border: #2c333e;
-  --text-primary: #e6edf3;
-  --text-secondary: #8b949e;
-  --text-tertiary: #6e7681;
-  --accent: #3b82f6;
-  --accent-hover: #60a5fa;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.1);
-  --danger-border: rgba(239, 68, 68, 0.3);
+  --primary: #73a5ff;
+  --primary-active: #aac8ff;
+  --primary-disabled: #143278;
+
+  --ink: #ffffff;
+  --body: #d1d1d6;
+  --muted: #8c8989;
+  --muted-soft: #595959;
+
+  --hairline: #323232;
+  --hairline-soft: #262626;
+
+  --canvas: #121212;
+  --surface-soft: #1c1c1e;
+  --surface-card: #2c2c2e;
+  --surface-strong: #3a3a3c;
+
+  --on-primary: #121212;
+
+  /* Status colors adjusted for dark mode */
+  --brand-pink: #ff453a;
+  --brand-teal: #32d74b;
+  --brand-lavender: #73a5ff;
+  --brand-peach: #ffd60a;
+  --brand-ochre: #ff9f0a;
+  --brand-coral: #ff453a;
+
+  --success: #32d74b;
+  --warning: #ffd60a;
+  --error: #ff453a;
+
+  --shadow-card: 0 0 1rem rgba(0,0,0,0.3), 0 0.125rem 0.25rem rgba(0,0,0,0.4);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    /* System Dark Theme Fallback */
-    --bg: #0d0f12;
-    --surface: #1a1e24;
-    --surface-hover: #242931;
-    --border: #2c333e;
-    --text-primary: #e6edf3;
-    --text-secondary: #8b949e;
-    --text-tertiary: #6e7681;
-    --accent: #3b82f6;
-    --accent-hover: #60a5fa;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --danger-bg: rgba(239, 68, 68, 0.1);
-    --danger-border: rgba(239, 68, 68, 0.3);
+    --primary: #73a5ff;
+    --primary-active: #aac8ff;
+    --primary-disabled: #143278;
+    --ink: #ffffff;
+    --body: #d1d1d6;
+    --muted: #8c8989;
+    --muted-soft: #595959;
+    --hairline: #323232;
+    --hairline-soft: #262626;
+    --canvas: #121212;
+    --surface-soft: #1c1c1e;
+    --surface-card: #2c2c2e;
+    --surface-strong: #3a3a3c;
+    --on-primary: #121212;
+    --brand-pink: #ff453a;
+    --brand-teal: #32d74b;
+    --brand-lavender: #73a5ff;
+    --brand-peach: #ffd60a;
+    --brand-ochre: #ff9f0a;
+    --brand-coral: #ff453a;
+    --success: #32d74b;
+    --warning: #ffd60a;
+    --error: #ff453a;
   }
 }
 
@@ -64,7 +110,12 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--canvas);
+  color: var(--body);
+  font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", Arial, "メイリオ", Meiryo, sans-serif;
+  line-height: 1.5;
 }
+
 
 /* Reset buttons and inputs */
 button,

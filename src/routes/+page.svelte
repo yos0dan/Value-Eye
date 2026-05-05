@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-  <title>バリュー眼: 容量の錯覚を、見抜く。</title>
+  <title>{appState.t("app.name")}: {appState.t("app.subtitle")}</title>
 </svelte:head>
 
 <Row width="100%" height="45px" gap={theme.spacing.lg}>
@@ -38,7 +38,7 @@
         <Text
           color={theme.colors.accent}
           fontWeight={theme.typography.weights.semibold}
-          fontSize={theme.typography.sizes.sm}>追加</Text
+          fontSize={theme.typography.sizes.sm}>{appState.t("compare.add")}</Text
         >
       </Row>
     </Button>
@@ -52,8 +52,12 @@
     alignment="center"
   >
     <Button
-      onPress={() => appState.resetComparison()}
-      color={theme.colors.dangerBg}
+      onPress={() => {
+        if (confirm(appState.t("compare.confirmReset"))) {
+          appState.resetComparison();
+        }
+      }}
+      color="transparent"
       textColor={theme.colors.danger}
       width="100%"
       height="100%"
@@ -64,7 +68,8 @@
         <Text
           color={theme.colors.danger}
           fontWeight={theme.typography.weights.semibold}
-          fontSize={theme.typography.sizes.sm}>リセット</Text
+          fontSize={theme.typography.sizes.sm}
+          >{appState.t("compare.reset")}</Text
         >
       </Row>
     </Button>
@@ -72,7 +77,7 @@
 </Row>
 
 <!-- Input List -->
-<Column width="100%" gap={theme.spacing.xxl}>
+<Column width="100%" gap={theme.spacing.lg}>
   {#each appState.items as item, i (item.id)}
     <ItemCard
       bind:item={appState.items[i]}

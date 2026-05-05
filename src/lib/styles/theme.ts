@@ -1,67 +1,72 @@
 export const theme = {
   colors: {
-    bg: "var(--bg)",
-    surface: "var(--surface)",
-    surfaceHover: "var(--surface-hover)",
-    border: "var(--border)",
-    textPrimary: "var(--text-primary)",
-    textSecondary: "var(--text-secondary)",
-    textTertiary: "var(--text-tertiary)",
-    accent: "var(--accent)",
-    accentHover: "var(--accent-hover)",
+    bg: "var(--canvas)",
+    surface: "var(--surface-card)",
+    surfaceHover: "var(--surface-strong)",
+    border: "var(--hairline)",
+    textPrimary: "var(--ink)",
+    textSecondary: "var(--body)",
+    textTertiary: "var(--muted)",
+    accent: "var(--primary)",
+    accentHover: "var(--primary-active)",
     success: "var(--success)",
     warning: "var(--warning)",
-    danger: "var(--danger)",
-    dangerBg: "var(--danger-bg)",
-    dangerBorder: "var(--danger-border)",
+    danger: "var(--error)",
+    dangerBg: "var(--brand-coral)",
+    dangerBorder: "var(--brand-coral)",
+    brandPink: "var(--brand-pink)",
+    brandTeal: "var(--brand-teal)",
+    brandLavender: "var(--brand-lavender)",
+    brandPeach: "var(--brand-peach)",
+    brandOchre: "var(--brand-ochre)",
     transparent: "transparent",
   },
   typography: {
-    fontFamily:
-      '"Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
+    fontFamily: '"Noto Sans JP", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", Arial, Meiryo, sans-serif',
+    fontDisplay: '"Noto Sans JP", sans-serif', 
     fontMono: '"JetBrains Mono", "Fira Code", "Roboto Mono", monospace',
     sizes: {
-      xs: 12,
-      sm: 13,
-      md: 14,
-      lg: 15,
-      xl: 16,
-      h3: 20,
-      h2: 24,
-      h1: 28,
+      xs: 12, // Caption
+      sm: 14, // Body
+      md: 16, // Body-md
+      lg: 18, // Title-sm
+      xl: 24, // Heading-H3
+      h3: 24, 
+      h2: 34, 
+      h1: 40, 
     },
     weights: {
       normal: 400,
       medium: 500,
-      semibold: 600,
-      bold: 700,
-      extrabold: 800,
+      semibold: 500, // freee uses 500 for headings
+      bold: 700, 
+      extrabold: 700,
     },
   },
   spacing: {
     zero: 0,
-    xs: 2,
-    sm: 4,
-    md: 6,
-    lg: 8,
-    xl: 12,
-    xxl: 16,
-    xxxl: 20,
-    huge: 24,
-    massive: 40,
-    giant: 60,
+    xs: 4,   // XSmall
+    sm: 8,   // Small
+    md: 16,  // Basic
+    lg: 24,  // Large
+    xl: 32,  // XLarge
+    xxl: 48, // XXLarge
+    xxxl: 64, 
+    huge: 80,
+    massive: 96,
+    giant: 120,
   },
   borderRadius: {
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
+    sm: 4,  // MiniPadding
+    md: 8,  // Base
+    lg: 12, // Card
+    xl: 16, // Floating
     full: 9999,
   },
   shadows: {
     none: "none",
-    subtle:
-      "0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3)",
-    glow: "0 0 15px rgba(59, 130, 246, 0.15)",
+    subtle: "var(--shadow-card)",
+    glow: "0 0 0 2px var(--primary)", 
   },
 };
+

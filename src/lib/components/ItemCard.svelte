@@ -33,22 +33,42 @@
   let isTie = $derived(stats?.status === "tie");
 
   let statusColor = $derived(
-    isCheapest || isTie
-      ? theme.colors.success
-      : isTricked
-        ? theme.colors.danger
-        : theme.colors.border,
+    isCheapest
+      ? theme.colors.accent // Primary Blue
+      : isTie
+        ? theme.colors.brandLavender // Heading Blue
+        : isTricked
+          ? theme.colors.brandPink // Danger Red
+          : theme.colors.surface
   );
+  
+  // Determine if the background is dark enough to require light text
+  let isDarkBackground = $derived(isCheapest || isTricked);
+
+  let finalTextColor = $derived.by(() => {
+    if (isDarkBackground) return "#ffffff";
+    if (appState.isDark) return "#ffffff";
+    return theme.colors.textPrimary;
+  });
+  
+  let secondaryTextColor = $derived.by(() => {
+    if (isDarkBackground) return "rgba(255,255,255,0.85)";
+    if (appState.isDark) return "rgba(255,255,255,0.7)";
+    return theme.colors.textSecondary;
+  });
+
+
 
   let statusText = $derived(
     isTie
-      ? "引き分け (同じ単価)"
+      ? appState.t("compare.status.tie")
       : isCheapest
-        ? "最安値 (BEST VALUE)"
+        ? appState.t("compare.status.best")
         : isTricked
-          ? `割高注意（容量トリック検知: +${stats?.diffPercentage}% 割高）`
+          ? appState.t("compare.status.tricked", { diff: stats?.diffPercentage || "0" })
           : " ",
   );
+
 
   let unitMultiplier = $derived(
     mode === "capacity"
@@ -57,8 +77,8 @@
   );
   let baseUnit = $derived(
     mode === "capacity"
-      ? UNITS.find((u) => u.value === item.unit)?.base || item.unit
-      : "個",
+      ? appState.t(`units.${UNITS.find((u) => u.value === item.unit)?.base || item.unit}`)
+      : appState.t("units.pcs"),
   );
   let isValid = $derived(
     mode === "capacity"
@@ -124,25 +144,24 @@
     style:position="absolute"
     style:top="-12px"
     style:left="16px"
-    style:background-color={statusText !== " " ? statusColor : "transparent"}
-    style:color={isCheapest || isTie
-      ? theme.colors.bg
-      : theme.colors.textPrimary}
+    style:background-color={statusText !== " " ? theme.colors.surface : "transparent"}
+    style:color={theme.colors.textPrimary}
     style:padding={statusText !== " " ? "4px 12px" : "0"}
-    style:border-radius={`${theme.borderRadius.sm}px`}
+    style:border-radius={`${theme.borderRadius.full}px`}
     style:font-size={`${theme.typography.sizes.xs}px`}
-    style:font-weight={theme.typography.weights.extrabold}
+    style:font-weight={theme.typography.weights.semibold}
     style:display="flex"
     style:align-items="center"
     style:gap="4px"
     style:z-index="1"
     style:opacity={statusText !== " " ? 1 : 0}
     style:transition="opacity 0.2s ease"
+    style:box-shadow={statusText !== " " ? "0 2px 4px rgba(0,0,0,0.05)" : "none"}
   >
     {#if isCheapest || isTie}
-      <Check size={14} color={theme.colors.bg} />
+      <Check size={14} color={theme.colors.success} />
     {:else if isTricked}
-      <ShieldAlert size={14} color={theme.colors.textPrimary} />
+      <ShieldAlert size={14} color={theme.colors.warning} />
     {/if}
     {statusText}
   </div>
@@ -151,17 +170,17 @@
     <Container
       width="100%"
       padding={16}
-      borderRadius={theme.borderRadius.md}
+      borderRadius={theme.borderRadius.lg}
       color={theme.colors.surface}
-      border={`2px solid ${statusColor}`}
+      border={`1px solid ${statusColor !== theme.colors.surface ? statusColor : theme.colors.border}`}
     >
       <Column gap={theme.spacing.xxl} width="100%">
         <Row width="100%" gap={theme.spacing.xl} crossAxisAlignment="start">
           <Container width="65%">
             <TextField
               bind:value={item.name}
-              label="商品名"
-              placeholder="(任意)"
+              label={appState.t("compare.item.name")}
+              placeholder={appState.t("compare.item.namePlaceholder")}
               width="100%"
               type="text"
             />
@@ -169,8 +188,8 @@
           <Container width="35%">
             <TextField
               bind:value={item.price}
-              label="価格"
-              placeholder="398"
+              label={appState.t("compare.item.price")}
+              placeholder={appState.t("compare.item.pricePlaceholder")}
               type="number"
             />
           </Container>
@@ -185,19 +204,23 @@
             <Container width="40%">
               <TextField
                 bind:value={item.amount}
-                label="容量"
-                placeholder="500"
+                label={appState.t("compare.item.amount")}
+                placeholder={appState.t("compare.item.amountPlaceholder")}
                 type="number"
               />
             </Container>
             <Container width="40%">
-              <Select bind:value={item.unit} label="単位" options={UNITS} />
+              <Select 
+                bind:value={item.unit} 
+                label={appState.t("compare.item.unit")} 
+                options={UNITS.map(u => ({ ...u, label: appState.t(u.label) }))} 
+              />
             </Container>
           {:else}
             <Container width="40%">
               <TextField
                 bind:value={item.pointRate}
-                label="付与率(%)"
+                label={appState.t("compare.item.pointRate")}
                 placeholder="0"
                 type="number"
               />
@@ -205,7 +228,7 @@
             <Container width="40%">
               <TextField
                 bind:value={item.itemCount}
-                label="商品数(個)"
+                label={appState.t("compare.item.itemCount")}
                 placeholder="1"
                 type="number"
               />
@@ -227,14 +250,14 @@
               fontSize={theme.typography.sizes.xs}
               color={theme.colors.textTertiary}
             >
-              ※ 枠外タップで確定
+              {appState.t("compare.item.editHint")}
             </Text>
             <Text
               fontSize={theme.typography.sizes.sm}
               color={theme.colors.textTertiary}
               fontFamily={theme.typography.fontMono}
             >
-              単価: ¥{formatPrice(unitPrice)} / {baseUnit}
+              {appState.t("compare.item.unitPrice")}: ¥{formatPrice(unitPrice)} / {baseUnit}
             </Text>
           </Row>
         {/if}
@@ -251,57 +274,56 @@
     >
       <Container
         width="100%"
-        padding={16}
-        borderRadius={theme.borderRadius.md}
-        color={theme.colors.surface}
-        border={`2px solid ${statusColor}`}
+        padding={{ horizontal: 20, vertical: 24 }}
+        borderRadius={theme.borderRadius.lg}
+        color={statusColor}
+        boxShadow={statusColor === theme.colors.surface ? theme.shadows.subtle : "none"}
       >
         <Row
           width="100%"
           mainAxisAlignment="spaceBetween"
           crossAxisAlignment="center"
         >
-          <Column gap={theme.spacing.md}>
+          <Column gap={theme.spacing.sm} crossAxisAlignment="start">
             <Text
-              fontSize={theme.typography.sizes.xl}
+              fontSize={theme.typography.sizes.lg}
               fontWeight={theme.typography.weights.bold}
-              color={theme.colors.textPrimary}
+              color={finalTextColor}
+              style="line-height: 1.2"
             >
-              {item.name || "名称未設定"}
+              {item.name || appState.t("compare.item.namePlaceholder")}
             </Text>
-            <Row gap={theme.spacing.sm} crossAxisAlignment="center">
+            <Row gap={theme.spacing.xs} crossAxisAlignment="center">
               <Text
-                fontSize={theme.typography.sizes.md}
-                color={theme.colors.textSecondary}
+                fontSize={theme.typography.sizes.sm}
+                color={secondaryTextColor}
                 fontFamily={theme.typography.fontMono}
               >
                 {#if mode === "capacity"}
                   ¥{formatPrice(parseFloat(item.price))}
-                  <span style="color: {theme.colors.textTertiary}">/</span>
-                  {item.amount}{item.unit}
+                  <span style="color: {secondaryTextColor}">/</span>
+                  {item.amount}{appState.t(UNITS.find(u => u.value === item.unit)?.label || `units.${item.unit}`)}
                 {:else}
                   ¥{formatPrice(parseFloat(item.price))}
-                  <span style="color: {theme.colors.textTertiary}">/</span>
-                  {item.pointRate || 0}%還元・{item.itemCount || 1}個
+                  <span style="color: {secondaryTextColor}">/</span>
+                  {item.pointRate || 0}{appState.t("compare.item.pointBack")}{item.itemCount || 1}{appState.t("units.pcs")}
                 {/if}
               </Text>
             </Row>
           </Column>
 
-          <Column crossAxisAlignment="end" gap={theme.spacing.xs}>
+          <Column crossAxisAlignment="end" gap={theme.spacing.zero}>
             <Row gap={2} crossAxisAlignment="center">
               <Text
-                fontSize={theme.typography.sizes.sm}
-                color={theme.colors.textSecondary}
+                fontSize={theme.typography.sizes.xs}
+                color={secondaryTextColor}
               >
                 ¥
               </Text>
               <Text
-                fontSize={theme.typography.sizes.h3}
+                fontSize={theme.typography.sizes.xl}
                 fontWeight={theme.typography.weights.extrabold}
-                color={statusColor !== theme.colors.border
-                  ? statusColor
-                  : theme.colors.textPrimary}
+                color={finalTextColor}
                 fontFamily={theme.typography.fontMono}
               >
                 {formatPrice(unitPrice)}
@@ -309,7 +331,7 @@
             </Row>
             <Text
               fontSize={theme.typography.sizes.xs}
-              color={theme.colors.textTertiary}
+              color={secondaryTextColor}
             >
               / {baseUnit}
             </Text>

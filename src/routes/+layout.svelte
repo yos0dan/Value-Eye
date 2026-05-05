@@ -8,7 +8,14 @@
   import Text from "$lib/components/ui/Text.svelte";
   import Row from "$lib/components/ui/Row.svelte";
   import Button from "$lib/components/ui/Button.svelte";
-  import { ReceiptText, History, Map, Settings, FlaskConical, CircleParking } from "lucide-svelte";
+  import {
+    ReceiptText,
+    History,
+    Map as MapIcon,
+    Settings,
+    FlaskConical,
+    CircleParking,
+  } from "lucide-svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { base } from "$app/paths";
@@ -18,11 +25,11 @@
   let { children }: { children: Snippet } = $props();
 
   let activeTab = $derived(
-    $page.url.pathname.includes("/history")
+    $page.route.id?.includes("/history")
       ? "history"
-      : $page.url.pathname.includes("/map")
+      : $page.route.id === "/map"
         ? "map"
-        : $page.url.pathname.includes("/settings")
+        : $page.route.id?.includes("/settings")
           ? "settings"
           : "compare",
   );
@@ -60,13 +67,13 @@
           letterSpacing={-0.5}
           color={theme.colors.textPrimary}
         >
-          バリュー眼
+          {appState.t("app.name")}
         </Text>
         <Text
           fontSize={theme.typography.sizes.md}
           color={theme.colors.textSecondary}
         >
-          容量の錯覚を、見抜く。
+          {appState.t("app.subtitle")}
         </Text>
       </Column>
 
@@ -81,7 +88,7 @@
             .full}px; border: none; background: {appState.mode === 'capacity'
             ? theme.colors.accent
             : 'transparent'}; color: {appState.mode === 'capacity'
-            ? '#fff'
+            ? '#ffffff'
             : theme.colors.textSecondary}; font-size: {theme.typography.sizes
             .sm}px; font-weight: {theme.typography.weights
             .bold}; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;"
@@ -94,7 +101,7 @@
             .full}px; border: none; background: {appState.mode === 'point'
             ? theme.colors.accent
             : 'transparent'}; color: {appState.mode === 'point'
-            ? '#fff'
+            ? '#ffffff'
             : theme.colors.textSecondary}; font-size: {theme.typography.sizes
             .sm}px; font-weight: {theme.typography.weights
             .bold}; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;"
@@ -114,15 +121,16 @@
         width="100%"
         height="100%"
         color="transparent"
+        borderRadius={0}
       >
-        <div class="nav-icon">
+        <Column gap={4} mainAxisAlignment="center" crossAxisAlignment="center">
           <ReceiptText
             size={22}
             color={activeTab === "compare"
               ? theme.colors.accent
               : theme.colors.textSecondary}
           />
-        </div>
+        </Column>
       </Button>
     </div>
     <div class="nav-item">
@@ -131,15 +139,16 @@
         width="100%"
         height="100%"
         color="transparent"
+        borderRadius={0}
       >
-        <div class="nav-icon">
+        <Column gap={4} mainAxisAlignment="center" crossAxisAlignment="center">
           <History
             size={22}
             color={activeTab === "history"
               ? theme.colors.accent
               : theme.colors.textSecondary}
           />
-        </div>
+        </Column>
       </Button>
     </div>
     <div class="nav-item">
@@ -148,15 +157,16 @@
         width="100%"
         height="100%"
         color="transparent"
+        borderRadius={0}
       >
-        <div class="nav-icon">
-          <Map
+        <Column gap={4} mainAxisAlignment="center" crossAxisAlignment="center">
+          <MapIcon
             size={22}
             color={activeTab === "map"
               ? theme.colors.accent
               : theme.colors.textSecondary}
           />
-        </div>
+        </Column>
       </Button>
     </div>
     <div class="nav-item">
@@ -165,15 +175,16 @@
         width="100%"
         height="100%"
         color="transparent"
+        borderRadius={0}
       >
-        <div class="nav-icon">
+        <Column gap={4} mainAxisAlignment="center" crossAxisAlignment="center">
           <Settings
             size={22}
             color={activeTab === "settings"
               ? theme.colors.accent
               : theme.colors.textSecondary}
           />
-        </div>
+        </Column>
       </Button>
     </div>
   </nav>
@@ -191,11 +202,19 @@
 >
   <Scaffold {appBar} {bottomNavigationBar}>
     <Container
-      padding={{ top: 10, horizontal: 20, bottom: 40 }}
+      padding={{
+        top: 10,
+        horizontal: activeTab === "map" ? 0 : 20,
+        bottom: 40,
+      }}
       width="100%"
       alignment="topCenter"
     >
-      <Column width="100%" style="max-width: 600px;" gap={theme.spacing.xxl}>
+      <Column
+        width="100%"
+        style="max-width: {activeTab === 'map' ? 'none' : '600px'};"
+        gap={theme.spacing.md}
+      >
         {@render children()}
       </Column>
     </Container>
@@ -209,35 +228,28 @@
     width: 100%;
     height: 60px;
     margin-bottom: 25px;
+    align-items: center;
   }
   .nav-item {
-    flex: 1;
+    width: 25%;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    width: 100%;
-  }
-  .nav-icon {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: center;
-    justify-content: center;
   }
 
   @media (min-width: 768px) {
     .responsive-nav {
       flex-direction: column;
-      width: 100%;
-      height: 100%;
-      margin: 0;
+      height: auto;
+      margin-bottom: 0;
       padding-top: 40px;
       gap: 16px;
     }
     .nav-item {
       flex: none;
       height: 60px;
+      width: 100%;
     }
   }
 </style>

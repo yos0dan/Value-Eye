@@ -21,8 +21,10 @@
     zIndex,
     as = "div",
     style = "",
+    id,
   }: {
     children?: Snippet;
+    id?: string;
     width?: number | string;
     height?: number | string;
     padding?: number | string | EdgeInsetsType;
@@ -106,6 +108,7 @@
 
 <svelte:element
   this={as}
+  {id}
   style:display={alignStyles.display}
   style:justify-content={alignStyles.justifyContent}
   style:align-items={alignStyles.alignItems}

@@ -24,13 +24,13 @@
   let isFocused = $state(false);
 </script>
 
-<Column gap={theme.spacing.md} crossAxisAlignment="start" {width}>
+<Column gap={4} crossAxisAlignment="start" {width}>
   {#if label}
     <Text
       fontSize={theme.typography.sizes.xs}
       color={theme.colors.textSecondary}
       fontWeight={theme.typography.weights.semibold}
-      letterSpacing={0.5}>{label.toUpperCase()}</Text
+      letterSpacing={1.5}>{label.toUpperCase()}</Text
     >
   {/if}
   <input
@@ -41,17 +41,18 @@
     onfocus={() => (isFocused = true)}
     onblur={() => (isFocused = false)}
     style:width={toCssUnit(width) || "100%"}
-    style:background-color={theme.colors.surface}
+    style:height="44px"
+    style:background-color={theme.colors.bg}
     style:color={theme.colors.textPrimary}
     style:border={isFocused
       ? `1px solid ${theme.colors.accent}`
       : `1px solid ${theme.colors.border}`}
-    style:border-radius={`${theme.borderRadius.md}px`}
-    style:padding="10px 14px"
+    style:border-radius={`${theme.borderRadius.sm}px`}
+
+    style:padding="12px 16px"
     style:outline="none"
     style:transition="all 0.2s ease"
-    style:font-size={`${theme.typography.sizes.xl}px`}
-    style:font-family={theme.typography.fontMono}
-    style:box-shadow={isFocused ? theme.shadows.glow : theme.shadows.none}
+    style:font-size={`${theme.typography.sizes.md}px`}
+    style:font-family={theme.typography.fontFamily}
   />
 </Column>

@@ -5,4 +5,5 @@ export type HistoryEntry = {
   timestamp: number;
   title: string;
   items: Item[];
+  location?: { lat: number; lng: number };
 };

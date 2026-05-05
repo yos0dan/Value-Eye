@@ -4,13 +4,15 @@
   import Text from "$lib/components/ui/Text.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import Row from "$lib/components/ui/Row.svelte";
-  import { Download } from "lucide-svelte";
+  import { Download, ChevronRight } from "lucide-svelte";
   import { theme } from "$lib/styles/theme";
   import { appState } from "$lib/stores/app.svelte";
+  import { goto } from "$app/navigation";
+  import { base } from "$app/paths";
 
   function exportHistory() {
     if (appState.histories.length === 0) {
-      alert("エクスポートする履歴がありません。");
+      alert(appState.t("settings.export.noHistory"));
       return;
     }
     const dataStr =
@@ -27,73 +29,66 @@
 </script>
 
 <svelte:head>
-  <title>Settings - バリュー眼</title>
+  <title>{appState.t("nav.settings")} - {appState.t("app.name")}</title>
 </svelte:head>
 
-<Column gap={theme.spacing.xxl} width="100%">
-  <!-- Readme Section -->
+<Column gap={theme.spacing.lg} width="100%">
+  <!-- Language Setting Section -->
   <Column gap={theme.spacing.sm} width="100%">
     <Text
-      fontSize={theme.typography.sizes.lg}
-      fontWeight={theme.typography.weights.bold}
+      fontSize={theme.typography.sizes.xs}
+      fontWeight={theme.typography.weights.semibold}
+      letterSpacing={1.5}
+      color={theme.colors.textSecondary}
     >
-      バリュー眼 について
+      {appState.t("settings.language.title").toUpperCase()}
     </Text>
     <Container
       width="100%"
       padding={20}
-      borderRadius={theme.borderRadius.md}
-      color={theme.colors.surface}
-      border={`1px solid ${theme.colors.border}`}
+      borderRadius={theme.borderRadius.xl}
+      color={theme.colors.brandPeach}
     >
-      <Column gap={theme.spacing.lg}>
-        <Text
-          fontSize={theme.typography.sizes.md}
-          fontWeight={theme.typography.weights.bold}
+      <div style="display: flex; background: rgba(255,255,255,0.3); border-radius: {theme.borderRadius.full}px; padding: 4px;">
+        <button
+          onclick={() => appState.setLanguage('ja')}
+          style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.language === 'ja' ? theme.colors.bg : 'transparent'}; color: {theme.colors.textPrimary}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
         >
-          容量の錯覚を見抜く、究極の比較ツール。
-        </Text>
-        <Text
-          fontSize={theme.typography.sizes.sm}
-          color={theme.colors.textSecondary}
-          style="line-height:1.6"
+          {appState.t("settings.language.ja")}
+        </button>
+        <button
+          onclick={() => appState.setLanguage('en')}
+          style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.language === 'en' ? theme.colors.bg : 'transparent'}; color: {theme.colors.textPrimary}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
         >
-          「大容量=お得」という無意識の固定観念や、悪意あるパッケージング。<br
-          /><br />
-          バリュー眼（Value-Eye）は、消費者が直感的に「本当に安くてお得なもの」を即座に計算し、賢い買い物を実現するためのシンプルなツールです。
-        </Text>
-        <Text
-          fontSize={theme.typography.sizes.xs}
-          color={theme.colors.textSecondary}
-        >
-          Version 1.0.0 (MVP)
-        </Text>
-      </Column>
+          {appState.t("settings.language.en")}
+        </button>
+      </div>
     </Container>
   </Column>
 
   <!-- Theme Setting Section -->
   <Column gap={theme.spacing.sm} width="100%">
     <Text
-      fontSize={theme.typography.sizes.lg}
-      fontWeight={theme.typography.weights.bold}
+      fontSize={theme.typography.sizes.xs}
+      fontWeight={theme.typography.weights.semibold}
+      letterSpacing={1.5}
+      color={theme.colors.textSecondary}
     >
-      表示テーマ
+      {appState.t("settings.theme.title").toUpperCase()}
     </Text>
     <Container
       width="100%"
-      padding={16}
-      borderRadius={theme.borderRadius.md}
-      color={theme.colors.surface}
-      border={`1px solid ${theme.colors.border}`}
+      padding={20}
+      borderRadius={theme.borderRadius.xl}
+      color={theme.colors.brandLavender}
     >
-      <div style="display: flex; background: {theme.colors.bg}; border-radius: {theme.borderRadius.md}px; padding: 4px; border: 1px solid {theme.colors.border};">
+      <div style="display: flex; background: rgba(255,255,255,0.3); border-radius: {theme.borderRadius.full}px; padding: 4px;">
         {#each ['system', 'light', 'dark'] as t}
           <button
             onclick={() => appState.setThemePreference(t as 'system'|'light'|'dark')}
-            style="flex: 1; padding: 10px; border-radius: {theme.borderRadius.sm}px; border: none; background: {appState.themePreference === t ? theme.colors.accent : 'transparent'}; color: {appState.themePreference === t ? '#fff' : theme.colors.textSecondary}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
+            style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.themePreference === t ? theme.colors.bg : 'transparent'}; color: {theme.colors.textPrimary}; font-size: {theme.typography.sizes.xs}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
           >
-            {t === 'system' ? '自動設定 (System)' : t === 'light' ? 'ライト (Light)' : 'ダーク (Dark)'}
+            {appState.t(`settings.theme.${t}`)}
           </button>
         {/each}
       </div>
@@ -103,51 +98,72 @@
   <!-- Export Section -->
   <Column gap={theme.spacing.sm} width="100%">
     <Text
-      fontSize={theme.typography.sizes.lg}
-      fontWeight={theme.typography.weights.bold}
+      fontSize={theme.typography.sizes.xs}
+      fontWeight={theme.typography.weights.semibold}
+      letterSpacing={1.5}
+      color={theme.colors.textSecondary}
     >
-      データ管理
+      {appState.t("settings.export.title").toUpperCase()}
     </Text>
     <Container
       width="100%"
-      padding={16}
-      borderRadius={theme.borderRadius.md}
-      color={theme.colors.surface}
-      border={`1px solid ${theme.colors.border}`}
+      padding={20}
+      borderRadius={theme.borderRadius.xl}
+      color={theme.colors.brandPink}
     >
       <Row
         width="100%"
         mainAxisAlignment="spaceBetween"
         crossAxisAlignment="center"
       >
-        <Column gap={4} style="flex: 1; padding-right: 16px;">
-          <Text fontWeight={theme.typography.weights.semibold}
-            >履歴のエクスポート</Text
+        <Column gap={4} style="flex: 1; padding-right: 16px;" crossAxisAlignment="start">
+          <Text fontWeight={theme.typography.weights.semibold} color={theme.colors.bg}
+            >{appState.t("settings.export.history")}</Text
           >
           <Text
             fontSize={theme.typography.sizes.xs}
-            color={theme.colors.textSecondary}
+            color="rgba(255,255,255,0.8)"
             style="line-height: 1.4;"
-            >保存された計算履歴を全てJSON形式でダウンロードします。</Text
+            >{appState.t("settings.export.historyDesc")}</Text
           >
         </Column>
         <Button
           onPress={exportHistory}
-          color={theme.colors.accent}
+          color={theme.colors.bg}
+          textColor={theme.colors.textPrimary}
           width="auto"
           padding={{ horizontal: 16, vertical: 8 }}
-          borderRadius={theme.borderRadius.sm}
+          height={40}
+          borderRadius={theme.borderRadius.full}
         >
           <Row gap={8} mainAxisAlignment="center" crossAxisAlignment="center">
-            <Download size={14} color={theme.colors.bg} />
+            <Download size={14} color={theme.colors.textPrimary} />
             <Text
-              color={theme.colors.bg}
+              color={theme.colors.textPrimary}
               fontSize={theme.typography.sizes.sm}
-              fontWeight={theme.typography.weights.bold}>保存</Text
+              fontWeight={theme.typography.weights.bold}
+              whiteSpace="nowrap">{appState.t("settings.export.save")}</Text
             >
           </Row>
         </Button>
       </Row>
     </Container>
+  </Column>
+
+  <!-- Readme Section (Nav Link) -->
+  <Column gap={theme.spacing.sm} width="100%">
+    <button 
+      onclick={() => goto(`${base}/settings/about`)}
+      style="background: none; border: none; padding: 12px 0; text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; width: 100%; border-top: 1px solid {theme.colors.border}; margin-top: 16px;"
+    >
+      <Text
+        fontSize={theme.typography.sizes.sm}
+        fontWeight={theme.typography.weights.bold}
+        color={theme.colors.textPrimary}
+      >
+        {appState.t("settings.about.title")}
+      </Text>
+      <ChevronRight size={20} color={theme.colors.textSecondary} />
+    </button>
   </Column>
 </Column>

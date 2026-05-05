@@ -25,7 +25,7 @@
         as="header"
         position="sticky"
         top={0}
-        zIndex={40}
+        zIndex={15000}
         width="100%"
         color={backgroundColor}
       >
@@ -45,7 +45,7 @@
       <Container
         position="fixed"
         bottom={bottomNavigationBar
-          ? "calc(80px + env(safe-area-inset-bottom))"
+          ? "calc(95px + env(safe-area-inset-bottom))"
           : "24px"}
         right="20px"
         zIndex={45}
@@ -77,9 +77,10 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* Add bottom padding equal to mobile nav bar height */
-    padding-bottom: 85px; 
+    /* Add bottom padding equal to mobile nav bar height + safe area */
+    padding-bottom: calc(85px + env(safe-area-inset-bottom)); 
   }
+
 
   .scaffold-content {
     flex: 1;
@@ -91,10 +92,12 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 50;
+    z-index: 20000;
     padding-bottom: env(safe-area-inset-bottom);
-    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid var(--hairline);
   }
+
 
   /* Desktop layout override */
   @media (min-width: 768px) {

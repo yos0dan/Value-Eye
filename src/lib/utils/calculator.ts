@@ -31,7 +31,7 @@ export function analyzeItems(items: Item[], mode: 'capacity' | 'point' = 'capaci
         const pointRate = parseFloat(item.pointRate || "0");
         const itemCount = parseFloat(item.itemCount || "1");
         normalizedAmount = itemCount;
-        baseUnit = "個";
+        baseUnit = "pcs";
         const actualCost = price * (1 - pointRate / 100);
         unitPrice = actualCost / itemCount;
       }

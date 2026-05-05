@@ -5,6 +5,7 @@
     children,
     mainAxisAlignment = "start",
     crossAxisAlignment = "center",
+    alignment,
     gap = 0,
     width,
     height,
@@ -21,6 +22,16 @@
       | "spaceAround"
       | "spaceEvenly";
     crossAxisAlignment?: "start" | "end" | "center" | "stretch" | "baseline";
+    alignment?:
+      | "topLeft"
+      | "topCenter"
+      | "topRight"
+      | "centerLeft"
+      | "center"
+      | "centerRight"
+      | "bottomLeft"
+      | "bottomCenter"
+      | "bottomRight";
     gap?: number | string;
     width?: string | number;
     height?: string | number;
@@ -28,6 +39,54 @@
     margin?: string | number;
     style?: string;
   } = $props();
+
+  const getFlexAlignment = () => {
+    if (!alignment) return { main: mainAxisAlignment, cross: crossAxisAlignment };
+    let main = "start";
+    let cross = "center";
+
+    switch (alignment) {
+      case "topLeft":
+        main = "start";
+        cross = "start";
+        break;
+      case "topCenter":
+        main = "start";
+        cross = "center";
+        break;
+      case "topRight":
+        main = "start";
+        cross = "end";
+        break;
+      case "centerLeft":
+        main = "center";
+        cross = "start";
+        break;
+      case "center":
+        main = "center";
+        cross = "center";
+        break;
+      case "centerRight":
+        main = "center";
+        cross = "end";
+        break;
+      case "bottomLeft":
+        main = "end";
+        cross = "start";
+        break;
+      case "bottomCenter":
+        main = "end";
+        cross = "center";
+        break;
+      case "bottomRight":
+        main = "end";
+        cross = "end";
+        break;
+    }
+    return { main, cross };
+  };
+
+  const finalAlign = $derived(getFlexAlignment());
 
   const getJustifyContent = (align: string) => {
     switch (align) {
@@ -65,8 +124,8 @@
     }
   };
 
-  const justifyContent = $derived(getJustifyContent(mainAxisAlignment));
-  const alignItems = $derived(getAlignItems(crossAxisAlignment));
+  const justifyContent = $derived(getJustifyContent(finalAlign.main));
+  const alignItems = $derived(getAlignItems(finalAlign.cross));
 
   const toCssUnit = (val?: string | number) =>
     typeof val === "number" ? `${val}px` : val;

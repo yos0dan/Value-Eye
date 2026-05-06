@@ -102,6 +102,7 @@
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
           (pos) => {
+            if (!map) return;
             const currentLat = pos.coords.latitude;
             const currentLon = pos.coords.longitude;
             map.setView([currentLat, currentLon], 15);
@@ -199,6 +200,7 @@
     if (!map || !L_ref) return;
 
     const updateLocation = (lat: number, lng: number) => {
+      if (!map) return;
       map.setView([lat, lng], 15);
 
       if (!userLocationMarker) {
@@ -261,6 +263,7 @@
       `;
       const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
       const res = await fetch(url);
+      if (!map) return;
       if (!res.ok) throw new Error("Network response was not ok");
       const data = await res.json();
 

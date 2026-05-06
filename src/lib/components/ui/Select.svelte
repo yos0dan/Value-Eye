@@ -52,7 +52,8 @@
         : `1px solid ${theme.colors.border}`}
       style:border-radius={`${theme.borderRadius.sm}px`}
 
-      style:padding="12px 36px 12px 16px"
+      style:padding="0 36px 0 16px"
+      style:line-height="44px"
       style:outline="none"
       style:transition="all 0.2s ease"
       style:font-size={`${theme.typography.sizes.md}px`}

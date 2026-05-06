@@ -174,7 +174,7 @@
       color={theme.colors.surface}
       border={`1px solid ${statusColor !== theme.colors.surface ? statusColor : theme.colors.border}`}
     >
-      <Column gap={theme.spacing.xxl} width="100%">
+      <Column gap={theme.spacing.md} width="100%">
         <Row width="100%" gap={theme.spacing.xl} crossAxisAlignment="start">
           <Container width="65%">
             <TextField
@@ -199,9 +199,10 @@
           width="100%"
           mainAxisAlignment="spaceBetween"
           crossAxisAlignment="end"
+          gap={theme.spacing.sm}
         >
           {#if mode === "capacity"}
-            <Container width="40%">
+            <Container style="flex: 0 0 40%;">
               <TextField
                 bind:value={item.amount}
                 label={appState.t("compare.item.amount")}
@@ -209,7 +210,7 @@
                 type="number"
               />
             </Container>
-            <Container width="40%">
+            <Container style="flex: 0 0 40%;">
               <Select 
                 bind:value={item.unit} 
                 label={appState.t("compare.item.unit")} 
@@ -217,7 +218,7 @@
               />
             </Container>
           {:else}
-            <Container width="40%">
+            <Container style="flex: 0 0 40%;">
               <TextField
                 bind:value={item.pointRate}
                 label={appState.t("compare.item.pointRate")}
@@ -225,7 +226,7 @@
                 type="number"
               />
             </Container>
-            <Container width="40%">
+            <Container style="flex: 0 0 40%;">
               <TextField
                 bind:value={item.itemCount}
                 label={appState.t("compare.item.itemCount")}
@@ -234,9 +235,16 @@
               />
             </Container>
           {/if}
-          <Button onPress={onRemove} color="transparent">
-            <Trash size={20} color={theme.colors.textTertiary} />
-          </Button>
+          <Container style="flex: 0 0 20%; display: flex; justify-content: flex-end; padding-bottom: 8px;">
+            <Button 
+              onPress={onRemove} 
+              color="transparent" 
+              padding={{ horizontal: 8, vertical: 8 }}
+              width="auto"
+            >
+              <Trash size={20} color={theme.colors.textTertiary} />
+            </Button>
+          </Container>
         </Row>
 
         <!-- Inline Result if valid -->

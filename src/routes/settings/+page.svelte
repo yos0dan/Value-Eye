@@ -9,6 +9,8 @@
   import { appState } from "$lib/stores/app.svelte";
   import { goto } from "$app/navigation";
   import { base } from "$app/paths";
+  import { fade } from "svelte/transition";
+  import { expoOut } from "svelte/easing";
 
   function exportHistory() {
     if (appState.histories.length === 0) {
@@ -32,7 +34,8 @@
   <title>{appState.t("nav.settings")} - {appState.t("app.name")}</title>
 </svelte:head>
 
-<Column gap={theme.spacing.lg} width="100%">
+<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1;">
+  <Column gap={theme.spacing.lg} width="100%">
   <!-- Language Setting Section -->
   <Column gap={theme.spacing.sm} width="100%">
     <Text
@@ -142,7 +145,7 @@
               color={theme.colors.textPrimary}
               fontSize={theme.typography.sizes.sm}
               fontWeight={theme.typography.weights.bold}
-              whiteSpace="nowrap">{appState.t("settings.export.save")}</Text
+              style="white-space: nowrap;">{appState.t("settings.export.save")}</Text
             >
           </Row>
         </Button>
@@ -167,3 +170,4 @@
     </button>
   </Column>
 </Column>
+</div>

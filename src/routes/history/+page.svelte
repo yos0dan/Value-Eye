@@ -10,6 +10,8 @@
   import { goto } from "$app/navigation";
   import { base } from "$app/paths";
   import { UNITS } from "$lib/constants/units";
+  import { fade } from "svelte/transition";
+  import { expoOut } from "svelte/easing";
 
   function restore(history: any) {
     if (
@@ -36,6 +38,7 @@
   <title>{appState.t("nav.history")} - {appState.t("app.name")}</title>
 </svelte:head>
 
+<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1;">
 <Container
   padding={{ top: 0, horizontal: 0, bottom: 8 }}
   width="100%"
@@ -174,3 +177,4 @@
     </Container>
   {/each}
 </Column>
+</div>

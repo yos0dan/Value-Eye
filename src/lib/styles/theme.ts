@@ -22,7 +22,7 @@ export const theme = {
     transparent: "transparent",
   },
   typography: {
-    fontFamily: '"Noto Sans JP", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", Arial, Meiryo, sans-serif',
+    fontFamily: '"Noto Sans JP", system-ui, -apple-system, sans-serif',
     fontDisplay: '"Noto Sans JP", sans-serif', 
     fontMono: '"JetBrains Mono", "Fira Code", "Roboto Mono", monospace',
     sizes: {

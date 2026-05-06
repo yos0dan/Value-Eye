@@ -35,6 +35,9 @@ self.addEventListener("fetch", (event: any) => {
 
   const url = new URL(event.request.url);
 
+  // Skip non-http/https schemes (like chrome-extension://)
+  if (!(url.protocol === 'http:' || url.protocol === 'https:')) return;
+
   // Bypass Service Worker for local development IPs to prevent Safari self-signed cert errors
   if (
     url.hostname === "localhost" ||

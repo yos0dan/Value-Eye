@@ -9,6 +9,8 @@
   import ItemCard from "$lib/components/ItemCard.svelte";
   import { appState } from "$lib/stores/app.svelte";
   import { analyzeItems } from "$lib/utils/calculator";
+  import { fade } from "svelte/transition";
+  import { expoOut } from "svelte/easing";
 
   let analyzedData = $derived(analyzeItems(appState.items, appState.mode));
 </script>
@@ -17,7 +19,8 @@
   <title>{appState.t("app.name")}: {appState.t("app.subtitle")}</title>
 </svelte:head>
 
-<Row width="100%" height="45px" gap={theme.spacing.lg}>
+<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1;">
+  <Row width="100%" height="45px" gap={theme.spacing.lg}>
   <Container
     width="70%"
     borderRadius={theme.borderRadius.md}
@@ -77,7 +80,7 @@
 </Row>
 
 <!-- Input List -->
-<Column width="100%" gap={theme.spacing.lg}>
+<Column width="100%" gap={theme.spacing.sm}>
   {#each appState.items as item, i (item.id)}
     <ItemCard
       bind:item={appState.items[i]}
@@ -86,3 +89,4 @@
     />
   {/each}
 </Column>
+</div>

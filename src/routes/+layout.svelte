@@ -27,7 +27,7 @@
   let activeTab = $derived(
     $page.route.id?.includes("/history")
       ? "history"
-      : $page.route.id === "/map"
+      : $page.route.id?.includes("/map")
         ? "map"
         : $page.route.id?.includes("/settings")
           ? "settings"
@@ -210,13 +210,14 @@
       width="100%"
       alignment="topCenter"
     >
-      <Column
-        width="100%"
-        style="max-width: {activeTab === 'map' ? 'none' : '600px'};"
-        gap={theme.spacing.md}
+      <div
+        class="page-container"
+        style="width: 100%; max-width: {activeTab === 'map' ? 'none' : '600px'};"
       >
-        {@render children()}
-      </Column>
+        {#key $page.route.id}
+          {@render children()}
+        {/key}
+      </div>
     </Container>
   </Scaffold>
 </div>
@@ -230,6 +231,20 @@
     margin-bottom: 25px;
     align-items: center;
   }
+
+  .page-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    justify-items: center;
+  }
+
+  .page-container > :global(*) {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+  }
+
   .nav-item {
     width: 25%;
     display: flex;

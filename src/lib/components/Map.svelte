@@ -46,6 +46,11 @@
   });
 
   onMount(async () => {
+    // Capture current prop values to avoid "derived_inert" warnings if unmounted during async setup
+    // and to ensure we pass plain numbers to Leaflet (avoiding Symbol/Proxy issues)
+    const initialLat = lat;
+    const initialLng = lng;
+
     // dynamically import leaflet since it needs window
     const L = (await import("leaflet")).default;
     L_ref = L;
@@ -69,8 +74,8 @@
 
     const defaultCenter: [number, number] = [35.6895, 139.6917];
 
-    if (lat !== undefined && lng !== undefined) {
-      map = L.map(mapElement).setView([lat, lng], 15);
+    if (initialLat !== undefined && initialLng !== undefined) {
+      map = L.map(mapElement).setView([initialLat, initialLng], 15);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -83,7 +88,7 @@
         iconSize: [20, 20],
         iconAnchor: [10, 10],
       });
-      L.marker([lat, lng], { icon: initialIcon })
+      L.marker([initialLat, initialLng], { icon: initialIcon })
         .addTo(map)
         .bindPopup(appState.t("map.atLocation"));
 
@@ -136,7 +141,10 @@
       iconAnchor: [16, 32],
     });
 
-    appState.histories.forEach((h) => {
+    // snapshot to avoid proxy issues with Leaflet
+    const histories = $state.snapshot(appState.histories);
+
+    histories.forEach((h) => {
       if (h.location && h.location.lat && h.location.lng) {
         const marker = L.marker([h.location.lat, h.location.lng], {
           icon: historyRedIcon,
@@ -220,10 +228,9 @@
 
     // If we have a cached location from appState (which watches in background), use it immediately
     if (appState.currentLocation) {
-      updateLocation(
-        appState.currentLocation.lat,
-        appState.currentLocation.lng,
-      );
+      // Use snapshot to ensure we have plain numbers
+      const loc = $state.snapshot(appState.currentLocation);
+      updateLocation(loc.lat, loc.lng);
     }
 
     if ("geolocation" in navigator) {

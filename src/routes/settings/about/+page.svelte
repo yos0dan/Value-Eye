@@ -18,7 +18,7 @@
   <title>{appState.t("settings.about.title")} - {appState.t("app.name")}</title>
 </svelte:head>
 
-<div in:fly={{ x: 30, duration: 600, easing: expoOut }} out:fly={{ x: 20, duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1;">
+<div in:fly={{ x: 30, duration: 600, easing: expoOut }} out:fly={{ x: 20, duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1; padding: 0 20px;">
   <button
     onclick={() => goto(`${base}/settings`)}
     style="background: none; border: none; padding: 0 0 16px 0; cursor: pointer; display: flex; align-items: center; gap: 8px;"

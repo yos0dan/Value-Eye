@@ -34,7 +34,7 @@
   <title>{appState.t("nav.settings")} - {appState.t("app.name")}</title>
 </svelte:head>
 
-<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1;">
+<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1; padding: 0 20px;">
   <Column gap={theme.spacing.lg} width="100%">
   <!-- Language Setting Section -->
   <Column gap={theme.spacing.sm} width="100%">
@@ -55,13 +55,13 @@
       <div style="display: flex; background: rgba(255,255,255,0.3); border-radius: {theme.borderRadius.full}px; padding: 4px;">
         <button
           onclick={() => appState.setLanguage('ja')}
-          style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.language === 'ja' ? theme.colors.bg : 'transparent'}; color: {theme.colors.textPrimary}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
+          style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.language === 'ja' ? theme.colors.bg : 'transparent'}; color: {appState.language === 'ja' ? theme.colors.textPrimary : '#323232'}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
         >
           {appState.t("settings.language.ja")}
         </button>
         <button
           onclick={() => appState.setLanguage('en')}
-          style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.language === 'en' ? theme.colors.bg : 'transparent'}; color: {theme.colors.textPrimary}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
+          style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.language === 'en' ? theme.colors.bg : 'transparent'}; color: {appState.language === 'en' ? theme.colors.textPrimary : '#323232'}; font-size: {theme.typography.sizes.sm}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
         >
           {appState.t("settings.language.en")}
         </button>
@@ -89,7 +89,7 @@
         {#each ['system', 'light', 'dark'] as t}
           <button
             onclick={() => appState.setThemePreference(t as 'system'|'light'|'dark')}
-            style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.themePreference === t ? theme.colors.bg : 'transparent'}; color: {theme.colors.textPrimary}; font-size: {theme.typography.sizes.xs}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
+            style="flex: 1; padding: 12px; border-radius: {theme.borderRadius.full}px; border: none; background: {appState.themePreference === t ? theme.colors.bg : 'transparent'}; color: {appState.themePreference === t ? theme.colors.textPrimary : '#323232'}; font-size: {theme.typography.sizes.xs}px; font-weight: {theme.typography.weights.bold}; cursor: pointer; transition: all 0.2s;"
           >
             {appState.t(`settings.theme.${t}`)}
           </button>

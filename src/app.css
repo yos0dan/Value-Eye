@@ -56,12 +56,12 @@
   --hairline: #323232;
   --hairline-soft: #262626;
 
-  --canvas: #121212;
+  --canvas: #262627;
   --surface-soft: #1c1c1e;
   --surface-card: #2c2c2e;
   --surface-strong: #3a3a3c;
 
-  --on-primary: #121212;
+  --on-primary: #262627;
 
   /* Status colors adjusted for dark mode */
   --brand-pink: #ff453a;
@@ -89,11 +89,11 @@
     --muted-soft: #595959;
     --hairline: #323232;
     --hairline-soft: #262626;
-    --canvas: #121212;
+    --canvas: #262627;
     --surface-soft: #1c1c1e;
     --surface-card: #2c2c2e;
     --surface-strong: #3a3a3c;
-    --on-primary: #121212;
+    --on-primary: #262627;
     --brand-pink: #ff453a;
     --brand-teal: #32d74b;
     --brand-lavender: #73a5ff;

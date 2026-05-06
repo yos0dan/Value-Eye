@@ -19,7 +19,7 @@
   <title>{appState.t("app.name")}: {appState.t("app.subtitle")}</title>
 </svelte:head>
 
-<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1;">
+<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1; padding: 0 20px;">
   <Row width="100%" height="45px" gap={theme.spacing.lg}>
   <Container
     width="70%"

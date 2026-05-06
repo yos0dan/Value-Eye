@@ -38,7 +38,7 @@
   <title>{appState.t("nav.history")} - {appState.t("app.name")}</title>
 </svelte:head>
 
-<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1;">
+<div in:fade={{ duration: 400, easing: expoOut }} out:fade={{ duration: 300 }} style="width: 100%; background-color: {theme.colors.bg}; position: relative; z-index: 1; padding: 0 20px;">
 <Container
   padding={{ top: 0, horizontal: 0, bottom: 8 }}
   width="100%"
@@ -101,6 +101,7 @@
             <Text
               fontWeight={theme.typography.weights.bold}
               fontSize={theme.typography.sizes.md}
+              color={theme.colors.textPrimary}
               style="flex: 1; word-break: break-all;"
             >
               {appState.getHistoryTitle(history)}

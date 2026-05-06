@@ -204,7 +204,7 @@
     <Container
       padding={{
         top: 10,
-        horizontal: activeTab === "map" ? 0 : 20,
+        horizontal: 0,
         bottom: 40,
       }}
       width="100%"

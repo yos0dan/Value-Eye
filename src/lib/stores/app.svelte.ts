@@ -11,7 +11,7 @@ export function generateId() {
 
 class AppState {
   items = $state<Item[]>([
-    { id: generateId(), name: "", price: "", amount: "", unit: "g", pointRate: "", itemCount: "1" },
+    { id: generateId(), name: "", price: "", amount: "", unit: "pcs", pointRate: "", itemCount: "1" },
   ]);
   histories = $state<HistoryEntry[]>([]);
   isLoaded = $state(false);
@@ -153,7 +153,7 @@ class AppState {
   }
 
   addItem() {
-    const lastUnit = this.items[this.items.length - 1]?.unit ?? "g";
+    const lastUnit = this.items[this.items.length - 1]?.unit ?? "pcs";
     this.items = [
       { id: generateId(), name: "", price: "", amount: "", unit: lastUnit, pointRate: "", itemCount: "1" },
       ...this.items,
@@ -168,7 +168,7 @@ class AppState {
 
   resetComparison() {
     this.items = [
-      { id: generateId(), name: "", price: "", amount: "", unit: "g", pointRate: "", itemCount: "1" },
+      { id: generateId(), name: "", price: "", amount: "", unit: "pcs", pointRate: "", itemCount: "1" },
     ];
     this.save();
   }

@@ -50,7 +50,7 @@
 
 {#snippet appBar()}
   <Container
-    padding={{ top: 40, horizontal: 20, bottom: 20 }}
+    padding={{ top: 20, horizontal: 20, bottom: 20 }}
     color={theme.colors.bg}
     width="100%"
     alignment="topCenter"
@@ -212,7 +212,9 @@
     >
       <div
         class="page-container"
-        style="width: 100%; max-width: {activeTab === 'map' ? 'none' : '600px'};"
+        style="width: 100%; max-width: {activeTab === 'map'
+          ? 'none'
+          : '600px'};"
       >
         {#key $page.route.id}
           {@render children()}
